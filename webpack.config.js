@@ -15,4 +15,25 @@ export default {
   plugins: [new HtmlWebpackPlugin(
     {template:'./frontend/index.html'}
   )],
+  module: {
+    rules: [
+      {
+        test: /\.(?:js|mjs|cjs)$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            targets: "defaults",
+            presets: [
+              ['@babel/preset-env']
+            ]
+          }
+        }
+      },
+      {
+        test: /\.css$/i,
+        use: ["style-loader", "css-loader"],
+      },
+    ]
+  }
 };

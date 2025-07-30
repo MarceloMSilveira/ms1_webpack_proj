@@ -1,4 +1,8 @@
+
+import "../frontend/styles.css";
 import _ from 'lodash';
+
+//alert('test');
 
 function component() {
   const element = document.createElement('div');
