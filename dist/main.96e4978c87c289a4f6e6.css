@@ -1,0 +1,1 @@
+body{display:flex;height:95%;width:95%}#all-app{background-color:#faebd7;border:1px solid;border-radius:15px;display:grid;grid-template-columns:1fr;grid-template-rows:1fr 30vh 1fr;margin:30px auto;padding:30px;width:60%}header{justify-content:space-between}header,main{display:flex}main{flex-direction:column}footer{display:flex;justify-content:center}

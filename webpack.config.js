@@ -1,10 +1,13 @@
 import HtmlWebpackPlugin from 'html-webpack-plugin';
+import MiniCssExtractPlugin from "mini-css-extract-plugin";
+import CssMinimizerPlugin from 'css-minimizer-webpack-plugin';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
+
 
 export default (env,argv) => {
   const isDev = argv.mode === 'development';
@@ -14,9 +17,10 @@ export default (env,argv) => {
     output: {
       filename: 'main.js',
       path: path.resolve(__dirname, 'dist'),
-      clean: true
+      clean: true,
+      publicPath: '',
     },
-    //devtool: isDev ? 'source-map' : false, -> adicionar source-map
+    devtool: isDev ? 'source-map' : false, // adicionar source-map
     devServer: isDev 
       ? {
           static: './dist',
@@ -25,6 +29,16 @@ export default (env,argv) => {
           watchFiles: ['frontend/*.html'], // 👈 assiste arquivos HTML
         }
       : undefined,
+    plugins: [
+      new MiniCssExtractPlugin({
+        filename: isDev ? '[name].css' : '[name].[contenthash].css',
+      }),
+      new HtmlWebpackPlugin(
+        {
+          template:'./frontend/index.html',
+          minify: !isDev
+        })
+    ],
     module: {
       rules: [
         {
@@ -42,15 +56,16 @@ export default (env,argv) => {
         },
         {
           test: /\.css$/i,
-          use: ["style-loader", "css-loader"],
-        },
+          use: [isDev ? "style-loader" : MiniCssExtractPlugin.loader, "css-loader"],
+        }
       ]
     },
-    plugins: [new HtmlWebpackPlugin(
-      {
-        template:'./frontend/index.html',
-        minify: !isDev
-      }
-    )],
+    optimization: {
+      minimize: !isDev,
+      minimizer: [
+        '...', // isso mantém os minimizers padrão do webpack (como Terser)
+        new CssMinimizerPlugin(), // adiciona a minificação de CSS
+      ],
+    },
   }
 };
