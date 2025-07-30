@@ -11,6 +11,11 @@ export default {
   output: {
     filename: 'main.js',
     path: path.resolve(__dirname, 'dist'),
+    clean: true
+  },
+  devServer: {
+    static: './dist',
+    watchFiles: ['frontend/*.html'], // 👈 assiste arquivos HTML
   },
   plugins: [new HtmlWebpackPlugin(
     {template:'./frontend/index.html'}
@@ -35,5 +40,6 @@ export default {
         use: ["style-loader", "css-loader"],
       },
     ]
-  }
+  },
+  mode: 'development'
 };
